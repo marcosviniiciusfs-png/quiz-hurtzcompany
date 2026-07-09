@@ -37,6 +37,53 @@ async function sha256(value: string) {
   return Array.from(new Uint8Array(digest)).map((byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
+function appendIfPresent(params: URLSearchParams, key: string, value: unknown) {
+  if (value === undefined || value === null || value === "") return;
+  params.set(key, String(value));
+}
+
+async function sendLeadWebhook(payload: LeadPayload, whatsappDigits: string, metaEventId: string) {
+  const webhookUrl = Deno.env.get("LEADS_WEBHOOK_URL");
+  if (!webhookUrl) return { configured: false, sent: false };
+
+  const url = new URL(webhookUrl);
+  const params = url.searchParams;
+  const answers = payload.raw_answers || {};
+
+  appendIfPresent(params, "event", "qualified_lead");
+  appendIfPresent(params, "lead_name", payload.lead_name);
+  appendIfPresent(params, "whatsapp", payload.whatsapp);
+  appendIfPresent(params, "whatsapp_digits", whatsappDigits);
+  appendIfPresent(params, "interest", payload.interest);
+  appendIfPresent(params, "requested_credit_value", answers.valorCredito);
+  appendIfPresent(params, "requested_credit_range", answers.valorCreditoLabel);
+  appendIfPresent(params, "has_down_payment", payload.has_down_payment);
+  appendIfPresent(params, "down_payment_value", payload.down_payment_value);
+  appendIfPresent(params, "monthly_payment_value", payload.monthly_payment_value);
+  appendIfPresent(params, "purchase_timeline", payload.purchase_timeline);
+  appendIfPresent(params, "source_url", payload.source_url);
+  appendIfPresent(params, "landing_domain", payload.landing_domain);
+  appendIfPresent(params, "meta_event_id", metaEventId);
+  appendIfPresent(params, "utm_source", payload.utm_source);
+  appendIfPresent(params, "utm_medium", payload.utm_medium);
+  appendIfPresent(params, "utm_campaign", payload.utm_campaign);
+  appendIfPresent(params, "utm_content", payload.utm_content);
+  appendIfPresent(params, "utm_term", payload.utm_term);
+  appendIfPresent(params, "fbclid", payload.fbclid);
+  appendIfPresent(params, "created_at", new Date().toISOString());
+
+  const response = await fetch(url.toString(), {
+    method: "GET",
+    headers: { "User-Agent": "quiz-hurtzcompany/1.0" },
+  });
+
+  return {
+    configured: true,
+    sent: response.ok,
+    status: response.status,
+  };
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -83,6 +130,23 @@ serve(async (req) => {
       .single();
 
     if (insertError) throw insertError;
+
+    let webhookResult = { configured: false, sent: false } as {
+      configured: boolean;
+      sent: boolean;
+      status?: number;
+      error?: string;
+    };
+
+    try {
+      webhookResult = await sendLeadWebhook(payload, whatsappDigits, metaEventId);
+    } catch (webhookError) {
+      webhookResult = {
+        configured: true,
+        sent: false,
+        error: String(webhookError?.message || webhookError),
+      };
+    }
 
     const pixelId = Deno.env.get("META_PIXEL_ID");
     const accessToken = Deno.env.get("META_ACCESS_TOKEN");
@@ -131,7 +195,13 @@ serve(async (req) => {
         .eq("id", inserted.id);
     }
 
-    return new Response(JSON.stringify({ ok: true, id: inserted.id, meta_event_id: inserted.meta_event_id }), {
+    return new Response(JSON.stringify({
+      ok: true,
+      id: inserted.id,
+      meta_event_id: inserted.meta_event_id,
+      webhook_sent: webhookResult.sent,
+      webhook_status: webhookResult.status,
+    }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
