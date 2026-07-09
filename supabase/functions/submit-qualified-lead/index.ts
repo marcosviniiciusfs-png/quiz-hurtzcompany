@@ -109,6 +109,8 @@ serve(async (req) => {
           down_payment_value: payload.down_payment_value,
           monthly_payment_value: payload.monthly_payment_value,
           purchase_timeline: payload.purchase_timeline,
+          requested_credit_value: payload.raw_answers?.valorCredito,
+          requested_credit_range: payload.raw_answers?.valorCreditoLabel,
         },
       };
 

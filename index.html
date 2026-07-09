@@ -1165,6 +1165,9 @@
   </style>
 </head>
 <body>
+  <noscript>
+    <img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=561285766391551&ev=PageView&noscript=1" />
+  </noscript>
   <main class="app">
     <header class="app-top">
       <div class="live-proof" aria-live="polite">
@@ -1427,6 +1430,7 @@
     const SUPABASE_URL = window.QUIZ_CONFIG?.SUPABASE_URL || "https://pugqefbsrknxhpeafsjq.supabase.co";
     const SUPABASE_ANON_KEY = window.QUIZ_CONFIG?.SUPABASE_ANON_KEY || "";
     const SUPABASE_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/submit-qualified-lead`;
+    const META_PIXEL_ID = "561285766391551";
     const STORAGE_KEY = "quiz-hurtz-lead-progress";
     const SOCIAL_PROOF_INTERVALS = [5000, 15000, 10000];
     const SOCIAL_PROOF_VISIBLE_MS = 10000;
@@ -1478,6 +1482,7 @@
     let activeSimulationCount = 10;
     let analysisTimer;
     let audioReady = false;
+    let metaLeadTracked = false;
 
     function formatCurrency(value) {
       return Number(value).toLocaleString("pt-BR", {
@@ -1795,6 +1800,50 @@
       return `lead-${Date.now()}-${Math.random().toString(16).slice(2)}`;
     }
 
+    function installMetaPixel() {
+      if (!META_PIXEL_ID || window.__hurtzMetaPixelInitialized) return;
+
+      if (typeof window.fbq !== "function") {
+        const pixel = function() {
+          pixel.callMethod
+            ? pixel.callMethod.apply(pixel, arguments)
+            : pixel.queue.push(arguments);
+        };
+        window.fbq = pixel;
+        if (!window._fbq) window._fbq = pixel;
+        pixel.push = pixel;
+        pixel.loaded = true;
+        pixel.version = "2.0";
+        pixel.queue = [];
+
+        const script = document.createElement("script");
+        script.async = true;
+        script.src = "https://connect.facebook.net/en_US/fbevents.js";
+        const firstScript = document.getElementsByTagName("script")[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+      }
+
+      window.fbq("init", META_PIXEL_ID);
+      window.fbq("track", "PageView");
+      window.__hurtzMetaPixelInitialized = true;
+    }
+
+    function trackMetaLead(payload) {
+      if (metaLeadTracked || typeof window.fbq !== "function" || !payload?.meta_event_id) return;
+      metaLeadTracked = true;
+      window.fbq("track", "Lead", {
+        content_name: "Quiz Hurtz Company",
+        content_category: "credito",
+        interest: payload.interest,
+        has_down_payment: payload.has_down_payment,
+        down_payment_value: payload.down_payment_value,
+        monthly_payment_value: payload.monthly_payment_value,
+        purchase_timeline: payload.purchase_timeline,
+        requested_credit_value: payload.raw_answers?.valorCredito,
+        requested_credit_range: payload.raw_answers?.valorCreditoLabel
+      }, { eventID: payload.meta_event_id });
+    }
+
     function buildLeadPayload() {
       if (!state.leadEventId) state.leadEventId = createEventId();
       const tracking = getTrackingParams();
@@ -1860,6 +1909,7 @@
       try {
         const payload = buildLeadPayload();
         await postLeadToSupabase(payload);
+        trackMetaLead(payload);
         state.leadSaved = true;
         state.leadSaveError = "";
         saveState();
@@ -2072,6 +2122,7 @@
     */
 
     loadState();
+    installMetaPixel();
     showScreen(state.screen || 1);
     startLiveCounter();
     startSocialProof();
