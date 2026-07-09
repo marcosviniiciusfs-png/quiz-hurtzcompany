@@ -1130,7 +1130,7 @@
       </div>
       <section class="progress-wrap" aria-label="Progresso do quiz">
         <div class="progress-meta">
-          <span id="progressText">Pergunta 1 de 6</span>
+          <span id="progressText">Pergunta 1 de 7</span>
           <button class="restart-btn" type="button" data-restart>Recomeçar</button>
           <span id="progressPercent">0%</span>
         </div>
@@ -1210,6 +1210,23 @@
       </div>
 
       <div class="screen" data-screen="4">
+        <span class="kicker">📈 Crédito</span>
+        <h2 id="valorCreditoTitle">Qual valor de crédito você pretende adquirir?</h2>
+        <p class="helper">Pode ser uma estimativa do valor do bem ou da carta que você busca.</p>
+        <div class="range-box">
+          <div class="range-value">
+            <strong id="creditoValorLabel">R$ 250.000</strong>
+            <small>De R$ 30 mil a R$ 1 milhão</small>
+          </div>
+          <input id="valorCredito" type="range" min="30000" max="1000000" step="10000" value="250000" />
+        </div>
+        <div class="actions">
+          <button class="btn" type="button" data-next-range="valorCredito">Continuar 💪</button>
+          <button class="btn secondary" type="button" data-back>Voltar</button>
+        </div>
+      </div>
+
+      <div class="screen" data-screen="5">
         <span class="kicker">📈 Potencial</span>
         <h2 id="valorEntradaTitle">Quanto você tem disponível para dar de entrada?</h2>
         <div class="range-box">
@@ -1225,7 +1242,7 @@
         </div>
       </div>
 
-      <div class="screen" data-screen="5">
+      <div class="screen" data-screen="6">
         <span class="kicker">📅 Planejamento</span>
         <h2 id="parcelaTitle">Quanto você pretende pagar de parcela por mês?</h2>
         <div class="range-box">
@@ -1241,7 +1258,7 @@
         </div>
       </div>
 
-      <div class="screen" data-screen="6">
+      <div class="screen" data-screen="7">
         <span class="kicker">🗓️ Momento</span>
         <h2 id="prazoTitle">Em quanto tempo você pretende adquirir esse bem?</h2>
         <div class="option-grid">
@@ -1269,7 +1286,7 @@
         <div class="toast" id="prazoToast"></div>
       </div>
 
-      <div class="screen" data-screen="7">
+      <div class="screen" data-screen="8">
         <div class="analysis-panel">
           <span class="kicker">📊 Análise</span>
           <div class="chart-loader" aria-hidden="true">
@@ -1294,11 +1311,11 @@
             </div>
           </div>
           <h2>O sistema está analisando seu perfil para liberação de crédito</h2>
-          <p class="status-note">Estamos cruzando objetivo, entrada, parcela e prazo para organizar sua posição de atendimento.</p>
+          <p class="status-note">Estamos cruzando objetivo, crédito desejado, entrada, parcela e prazo para organizar sua posição de atendimento.</p>
         </div>
       </div>
 
-      <div class="screen" data-screen="8">
+      <div class="screen" data-screen="9">
         <div class="confetti" aria-hidden="true" id="confetti"></div>
         <div class="qualified-header">
           <div class="final-badge">🏆</div>
@@ -1318,7 +1335,7 @@
         <p class="privacy">Ao continuar, você será direcionado ao WhatsApp com suas respostas já organizadas.</p>
       </div>
 
-      <div class="screen" data-screen="9">
+      <div class="screen" data-screen="10">
         <div class="rejected-header">
           <svg class="alert-triangle" viewBox="0 0 120 108" aria-hidden="true" focusable="false">
             <path class="alert-triangle-shape" d="M60 8 Q67 8 72 18 L113 91 Q117 100 107 102 L13 102 Q3 100 7 91 L48 18 Q53 8 60 8 Z"></path>
@@ -1359,12 +1376,13 @@
       { nome: "André", local: "Recife", interesse: "Carro" }
     ];
 
-    const totalQuestions = 6;
+    const totalQuestions = 7;
     const state = {
       screen: 1,
       nome: "",
       interesse: "",
       temEntrada: "",
+      valorCredito: 250000,
       valorEntrada: 50000,
       valorParcela: 1500,
       prazo: "",
@@ -1382,7 +1400,9 @@
     const activeSimulations = document.getElementById("activeSimulations");
     const nomeInput = document.getElementById("nome");
     const telefoneInput = document.getElementById("telefone");
+    const valorCreditoInput = document.getElementById("valorCredito");
     const valorEntradaInput = document.getElementById("valorEntrada");
+    const creditoValorLabel = document.getElementById("creditoValorLabel");
     const valorParcelaInput = document.getElementById("valorParcela");
     const entradaValorLabel = document.getElementById("entradaValorLabel");
     const parcelaValorLabel = document.getElementById("parcelaValorLabel");
@@ -1419,6 +1439,7 @@
         nome: "",
         interesse: "",
         temEntrada: "",
+        valorCredito: 250000,
         valorEntrada: 50000,
         valorParcela: 1500,
         prazo: "",
@@ -1430,6 +1451,7 @@
 
       nomeInput.value = "";
       telefoneInput.value = "";
+      valorCreditoInput.value = 250000;
       valorEntradaInput.value = 50000;
       valorParcelaInput.value = 1500;
       document.querySelectorAll(".error").forEach((error) => {
@@ -1448,6 +1470,7 @@
         if (state.screen < 1) state.screen = 1;
         nomeInput.value = state.nome || "";
         telefoneInput.value = state.telefone || "";
+        valorCreditoInput.value = state.valorCredito || 250000;
         valorEntradaInput.value = state.valorEntrada || 50000;
         valorParcelaInput.value = state.valorParcela || 1500;
       } catch (error) {
@@ -1457,7 +1480,7 @@
 
     function currentQuestionNumber(screenIndex) {
       if (screenIndex <= 1) return 1;
-      if (screenIndex >= 7) return totalQuestions;
+      if (screenIndex >= 8) return totalQuestions;
       return Math.min(screenIndex, totalQuestions);
     }
 
@@ -1467,11 +1490,11 @@
 
       progressBar.style.width = `${percent}%`;
       progressPercent.textContent = `${percent}%`;
-      progressText.textContent = state.screen === 7
+      progressText.textContent = state.screen === 8
         ? "Analisando perfil"
-        : state.screen === 8
+        : state.screen === 9
           ? "Resultado liberado"
-          : state.screen === 9
+          : state.screen === 10
             ? "Obrigado"
             : `Pergunta ${question} de ${totalQuestions}`;
     }
@@ -1482,6 +1505,7 @@
         ? `Show, ${nome}! Para qual bem você está buscando crédito?`
         : "Para qual bem você está buscando crédito?";
       document.getElementById("entradaTitle").textContent = `${nome}, você já tem algum valor para dar de entrada?`;
+      document.getElementById("valorCreditoTitle").textContent = `${nome}, qual valor de crédito você pretende adquirir?`;
       document.getElementById("valorEntradaTitle").textContent = `Boa, ${nome}! Quanto você tem disponível para entrada?`;
       document.getElementById("parcelaTitle").textContent = `Agora me conta, ${nome}: quanto pretende pagar por mês?`;
       document.getElementById("prazoTitle").textContent = `Última etapa, ${nome}: em quanto tempo quer adquirir esse bem?`;
@@ -1491,6 +1515,7 @@
     }
 
     function updateRangeLabels() {
+      creditoValorLabel.textContent = formatCurrency(state.valorCredito);
       entradaValorLabel.textContent = formatCurrency(state.valorEntrada);
       parcelaValorLabel.textContent = formatCurrency(state.valorParcela);
     }
@@ -1515,6 +1540,7 @@
 
       document.getElementById("leadSummary").innerHTML = `
         <div>Interesse <span>${state.interesse || "-"}</span></div>
+        <div>Crédito desejado <span>${formatCurrency(state.valorCredito || 0)}</span></div>
         <div>Entrada <span>${entrada}</span></div>
         <div>Parcela ideal <span>${parcela}</span></div>
         <div>Prazo <span>${prazo}</span></div>
@@ -1524,7 +1550,7 @@
     function showScreen(index) {
       window.clearTimeout(analysisTimer);
       state.screen = index;
-      app.classList.toggle("is-disqualified", index === 9);
+      app.classList.toggle("is-disqualified", index === 10);
       screens.forEach((screen) => {
         screen.classList.toggle("active", Number(screen.dataset.screen) === index);
       });
@@ -1533,10 +1559,10 @@
       updateRangeLabels();
       updateSelectedCards();
       updateSummary();
-      if (index === 7) {
-        analysisTimer = window.setTimeout(() => showScreen(8), 5000);
-      }
       if (index === 8) {
+        analysisTimer = window.setTimeout(() => showScreen(9), 5000);
+      }
+      if (index === 9) {
         startConfetti();
         saveQualifiedLead();
       }
@@ -1602,8 +1628,9 @@
       }
 
       if (key === "temEntrada") {
-        const next = value === "Sim" ? 4 : 9;
+        const next = value === "Sim" ? 4 : 10;
         if (value === "Não") {
+          state.valorCredito = 0;
           state.valorEntrada = 0;
           state.prazo = "";
           state.valorParcela = 0;
@@ -1615,17 +1642,17 @@
 
       if (key === "prazo") {
         showToast("prazoToast", "Analisando perfil 📊");
-        window.setTimeout(() => showScreen(7), 220);
+        window.setTimeout(() => showScreen(8), 220);
       }
     }
 
     function goBack() {
       if (state.screen <= 1) return;
-      if (state.screen === 7 || state.screen === 8) {
-        showScreen(6);
+      if (state.screen === 8 || state.screen === 9) {
+        showScreen(7);
         return;
       }
-      if (state.screen === 9) {
+      if (state.screen === 10) {
         showScreen(3);
         return;
       }
@@ -1636,6 +1663,9 @@
       const entrada = state.temEntrada === "Sim"
         ? `${state.temEntrada}, ${formatCurrency(state.valorEntrada)}`
         : "Não possui entrada no momento";
+      const credito = state.temEntrada === "Sim"
+        ? formatCurrency(state.valorCredito)
+        : "Não informado";
       const parcela = state.temEntrada === "Sim"
         ? formatCurrency(state.valorParcela)
         : "Não informado";
@@ -1649,6 +1679,7 @@
         `Nome: ${state.nome}`,
         `WhatsApp informado: ${state.telefone}`,
         `Interesse: ${state.interesse}`,
+        `Valor de crédito desejado: ${credito}`,
         `Tem entrada: ${entrada}`,
         `Parcela desejada: ${parcela}`,
         `Prazo para adquirir: ${prazo}`,
@@ -1719,6 +1750,7 @@
           telefone: state.telefone,
           interesse: state.interesse,
           temEntrada: state.temEntrada,
+          valorCredito: state.valorCredito,
           valorEntrada: state.valorEntrada,
           valorParcela: state.valorParcela,
           prazo: state.prazo,
@@ -1906,7 +1938,11 @@
 
     document.querySelectorAll("[data-next-range]").forEach((button) => {
       button.addEventListener("click", () => {
-        const next = button.dataset.nextRange === "valorEntrada" ? 5 : 6;
+        const next = button.dataset.nextRange === "valorCredito"
+          ? 5
+          : button.dataset.nextRange === "valorEntrada"
+            ? 6
+            : 7;
         showScreen(next);
       });
     });
@@ -1927,6 +1963,12 @@
       saveState();
     });
 
+    valorCreditoInput.addEventListener("input", () => {
+      state.valorCredito = Number(valorCreditoInput.value);
+      updateRangeLabels();
+      saveState();
+    });
+
     valorEntradaInput.addEventListener("input", () => {
       state.valorEntrada = Number(valorEntradaInput.value);
       updateRangeLabels();
@@ -1944,7 +1986,7 @@
 
       if (state.screen === 2) {
         if (validateName() && validatePhone()) showScreen(3);
-      } else if (state.screen === 8) {
+      } else if (state.screen === 9) {
         submitToWhatsapp();
       }
     });
