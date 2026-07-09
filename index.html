@@ -104,6 +104,10 @@
       transform: translateY(-1px);
     }
 
+    .app.is-disqualified .restart-btn {
+      display: none;
+    }
+
     .progress-track {
       height: 6px;
       background: rgba(216, 235, 228, 0.82);
@@ -513,29 +517,27 @@
       justify-items: center;
       gap: 16px;
       width: fit-content;
+      justify-self: center;
+      text-align: center;
     }
 
     .alert-triangle {
-      width: 0;
-      height: 0;
-      border-left: 52px solid transparent;
-      border-right: 52px solid transparent;
-      border-bottom: 92px solid #ffd463;
-      position: relative;
+      width: 116px;
+      height: 104px;
+      display: block;
       filter: drop-shadow(0 18px 32px rgba(247, 201, 72, 0.28));
       animation: trophy 1.1s ease infinite alternate;
     }
 
-    .alert-triangle::after {
-      content: "!";
-      position: absolute;
-      left: 50%;
-      top: 57px;
-      transform: translate(-50%, -50%);
-      color: var(--cor-primaria);
-      font-size: 2.45rem;
+    .alert-triangle-shape {
+      fill: #ffd463;
+    }
+
+    .alert-triangle-mark {
+      fill: var(--cor-primaria);
+      font-size: 42px;
       font-weight: 900;
-      line-height: 1;
+      font-family: "Poppins", system-ui, sans-serif;
     }
 
     .queue-box {
@@ -795,7 +797,33 @@
       place-items: center;
       border-radius: 14px;
       background: rgba(31, 138, 112, 0.12);
-      font-size: 1.15rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .social-proof-icon::before,
+    .social-proof-icon::after {
+      content: "";
+      display: block;
+      background: var(--cor-secundaria);
+    }
+
+    .social-proof-icon::before {
+      position: absolute;
+      top: 8px;
+      left: 13px;
+      width: 12px;
+      height: 12px;
+      border-radius: 12px;
+    }
+
+    .social-proof-icon::after {
+      position: absolute;
+      left: 9px;
+      right: 9px;
+      bottom: 8px;
+      height: 10px;
+      border-radius: 10px 10px 4px 4px;
     }
 
     .social-proof strong,
@@ -911,14 +939,8 @@
       }
 
       .alert-triangle {
-        border-left-width: 44px;
-        border-right-width: 44px;
-        border-bottom-width: 78px;
-      }
-
-      .alert-triangle::after {
-        top: 49px;
-        font-size: 2.1rem;
+        width: 98px;
+        height: 88px;
       }
 
       .chart-loader {
@@ -1164,17 +1186,20 @@
 
       <div class="screen" data-screen="9">
         <div class="rejected-header">
-          <div class="alert-triangle" aria-hidden="true"></div>
+          <svg class="alert-triangle" viewBox="0 0 120 108" aria-hidden="true" focusable="false">
+            <path class="alert-triangle-shape" d="M60 8 Q67 8 72 18 L113 91 Q117 100 107 102 L13 102 Q3 100 7 91 L48 18 Q53 8 60 8 Z"></path>
+            <text class="alert-triangle-mark" x="60" y="76" text-anchor="middle">!</text>
+          </svg>
           <span class="kicker">Obrigado</span>
         </div>
         <h2 id="rejectedTitle">Obrigado.</h2>
         <p class="result-copy">Infelizmente, você não se enquadra no perfil ideal para a linha de crédito solicitada neste momento.</p>
-        <button class="btn secondary full" type="button" data-restart>Recomeçar quiz</button>
+        <button class="btn secondary full" type="button" data-close-page>Fechar página</button>
       </div>
     </section>
 
     <aside class="social-proof" id="socialProof" aria-live="polite">
-      <div class="social-proof-icon">✨</div>
+      <div class="social-proof-icon" aria-hidden="true"></div>
       <div>
         <strong id="socialProofTitle">Nova simulação iniciada</strong>
         <span id="socialProofText">Alguém acabou de buscar crédito.</span>
@@ -1209,6 +1234,7 @@
     };
 
     const screens = Array.from(document.querySelectorAll(".screen"));
+    const app = document.querySelector(".app");
     const progressText = document.getElementById("progressText");
     const progressPercent = document.getElementById("progressPercent");
     const progressBar = document.getElementById("progressBar");
@@ -1351,6 +1377,7 @@
     function showScreen(index) {
       window.clearTimeout(analysisTimer);
       state.screen = index;
+      app.classList.toggle("is-disqualified", index === 9);
       screens.forEach((screen) => {
         screen.classList.toggle("active", Number(screen.dataset.screen) === index);
       });
@@ -1489,6 +1516,15 @@
       window.location.href = url;
     }
 
+    function closePage() {
+      window.open("", "_self");
+      window.close();
+      window.setTimeout(() => {
+        const button = document.querySelector("[data-close-page]");
+        if (button) button.textContent = "Pode fechar esta página";
+      }, 250);
+    }
+
     function startConfetti() {
       const confetti = document.getElementById("confetti");
       if (confetti.dataset.ready) return;
@@ -1566,6 +1602,7 @@
     document.querySelectorAll("[data-restart]").forEach((button) => {
       button.addEventListener("click", resetQuiz);
     });
+    document.querySelector("[data-close-page]").addEventListener("click", closePage);
     document.addEventListener("pointerdown", enableAudioNotice, { once: true });
     document.addEventListener("keydown", enableAudioNotice, { once: true });
 
