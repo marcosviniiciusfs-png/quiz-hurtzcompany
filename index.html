@@ -511,29 +511,40 @@
     .queue-box {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 12px;
+      gap: 4px;
+      justify-items: center;
+      text-align: center;
+      margin: 6px 0 0;
     }
 
     .queue-stat {
-      border: 1px solid var(--cor-borda);
-      border-radius: var(--raio);
-      background: #f8fffb;
-      padding: 18px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      padding: 0;
       color: var(--cor-primaria);
       display: grid;
-      gap: 5px;
+      gap: 0;
+      justify-items: center;
     }
 
     .queue-stat strong {
-      font-size: clamp(2rem, 7vw, 3.4rem);
+      color: var(--cor-acao);
+      font-size: clamp(1.8rem, 6vw, 2.1rem);
       line-height: 1;
       font-weight: 900;
     }
 
     .queue-stat span {
       color: var(--cor-suave);
+      font-size: 0.78rem;
       font-weight: 700;
       line-height: 1.35;
+    }
+
+    .queue-position strong {
+      color: var(--cor-acao);
+      font-weight: 900;
     }
 
     .analysis-panel {
@@ -925,9 +936,9 @@
             <span>clientes em espera para atendimento</span>
           </div>
         </div>
-        <p class="status-note">Com base no seu perfil, você está na posição 23 da fila.</p>
+        <p class="status-note queue-position">Com base no seu perfil, você está na <strong>posição 23</strong> da fila.</p>
         <div class="lead-summary" id="leadSummary"></div>
-        <button class="btn full" type="button" data-submit>Quero falar com um especialista agora</button>
+        <button class="btn full" type="button" data-submit>Fura fila</button>
         <p class="privacy">Ao continuar, você será direcionado ao WhatsApp com suas respostas já organizadas.</p>
       </div>
 
