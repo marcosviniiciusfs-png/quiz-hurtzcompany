@@ -11,19 +11,20 @@
   <meta property="og:image" content="https://dummyimage.com/1200x630/123c3a/f7c948&text=Quiz+de+Credito" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --cor-primaria: #123c3a;
-      --cor-secundaria: #1f8a70;
-      --cor-destaque: #f7c948;
-      --cor-acao: #ff7a59;
-      --cor-fundo: #f3faf7;
+      --cor-primaria: #0f172a;
+      --cor-secundaria: #0f766e;
+      --cor-destaque: #2563eb;
+      --cor-acao: #11845b;
+      --cor-fundo: #f3f7fa;
       --cor-card: #ffffff;
-      --cor-texto: #14213d;
-      --cor-suave: #667085;
-      --cor-borda: #d8e7df;
-      --sombra-card: 0 24px 70px rgba(18, 60, 58, 0.18);
+      --cor-texto: #0f172a;
+      --cor-suave: #64748b;
+      --cor-borda: #dce5ee;
+      --cor-soft: #e6f6f3;
+      --sombra-card: 0 20px 44px rgba(15, 23, 42, 0.10);
       --raio: 8px;
     }
 
@@ -34,15 +35,14 @@
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--cor-texto);
       background:
-        radial-gradient(circle at 10% 15%, rgba(247, 201, 72, 0.25), transparent 28%),
-        radial-gradient(circle at 90% 10%, rgba(31, 138, 112, 0.2), transparent 30%),
-        linear-gradient(135deg, #f7fff9 0%, #eaf7f0 48%, #fff8e2 100%);
-      display: grid;
-      place-items: center;
-      padding: 18px;
+        radial-gradient(circle at 20% 0%, rgba(37, 99, 235, 0.08), transparent 32%),
+        radial-gradient(circle at 88% 14%, rgba(15, 118, 110, 0.10), transparent 34%),
+        var(--cor-fundo);
+      display: block;
+      padding: 0;
       overflow-x: hidden;
     }
 
@@ -57,11 +57,62 @@
     }
 
     .app {
-      width: min(100%, 760px);
-      min-height: min(720px, calc(100vh - 36px));
+      width: 100%;
+      min-height: 100vh;
       display: grid;
-      align-content: center;
-      gap: 14px;
+      grid-template-rows: auto 1fr;
+      align-content: start;
+      gap: 0;
+    }
+
+    .app-top {
+      position: sticky;
+      top: 0;
+      z-index: 12;
+      display: grid;
+      gap: 13px;
+      padding: 14px max(16px, calc((100vw - 500px) / 2 + 16px)) 12px;
+      background: rgba(243, 247, 250, 0.92);
+      border-bottom: 1px solid rgba(220, 229, 238, 0.86);
+      backdrop-filter: blur(16px);
+    }
+
+    .live-proof {
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border: 1px solid var(--cor-borda);
+      border-radius: var(--raio);
+      background: rgba(255, 255, 255, 0.82);
+      padding: 9px 12px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+      color: var(--cor-primaria);
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    .live-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--cor-acao);
+      box-shadow: 0 0 0 0 rgba(17, 132, 91, 0.34);
+      animation: livePulse 1.6s ease-out infinite;
+      flex: 0 0 auto;
+    }
+
+    .live-proof strong {
+      color: var(--cor-secundaria);
+    }
+
+    @keyframes livePulse {
+      0% { box-shadow: 0 0 0 0 rgba(17, 132, 91, 0.34); }
+      70% { box-shadow: 0 0 0 10px rgba(17, 132, 91, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(17, 132, 91, 0); }
     }
 
     .progress-wrap {
@@ -72,8 +123,7 @@
       padding: 0;
       box-shadow: none;
       backdrop-filter: none;
-      position: sticky;
-      top: 12px;
+      position: static;
       z-index: 5;
     }
 
@@ -82,17 +132,19 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      margin: 0 4px 7px;
+      margin: 0 0 8px;
       color: var(--cor-primaria);
-      font-size: 0.76rem;
-      font-weight: 700;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
     }
 
     .restart-btn {
       min-height: 28px;
       padding: 4px 10px;
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.62);
+      border-radius: var(--raio);
+      background: rgba(255, 255, 255, 0.86);
       color: var(--cor-primaria);
       font-size: 0.72rem;
       font-weight: 800;
@@ -109,9 +161,9 @@
     }
 
     .progress-track {
-      height: 6px;
-      background: rgba(216, 235, 228, 0.82);
-      border-radius: 14px;
+      height: 5px;
+      background: #dde7f0;
+      border-radius: 999px;
       overflow: hidden;
       box-shadow: inset 0 0 0 1px rgba(18, 60, 58, 0.06);
     }
@@ -119,43 +171,39 @@
     .progress-bar {
       width: 0%;
       height: 100%;
-      border-radius: 14px;
-      background: linear-gradient(90deg, var(--cor-secundaria), var(--cor-destaque), var(--cor-acao));
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--cor-secundaria), var(--cor-destaque));
       transition: width 0.24s ease;
     }
 
     .quiz-card {
       position: relative;
-      overflow: hidden;
-      background: rgba(255, 255, 255, 0.92);
-      border: 1px solid rgba(216, 231, 223, 0.9);
+      width: min(100%, 500px);
+      margin: 0 auto;
+      overflow: visible;
+      background: transparent;
+      border: 0;
       border-radius: var(--raio);
-      box-shadow: var(--sombra-card);
-      min-height: 560px;
+      box-shadow: none;
+      min-height: 0;
     }
 
     .quiz-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(120deg, rgba(247, 201, 72, 0.13), transparent 32%),
-        linear-gradient(300deg, rgba(31, 138, 112, 0.13), transparent 35%);
-      pointer-events: none;
+      content: none;
     }
 
     .screen {
       position: relative;
       display: none;
-      min-height: 560px;
-      padding: clamp(24px, 5vw, 54px);
+      min-height: auto;
+      padding: 22px 18px 30px;
       animation: enter 0.22s ease both;
     }
 
     .screen.active {
       display: grid;
-      align-content: center;
-      gap: 22px;
+      align-content: start;
+      gap: 18px;
     }
 
     @keyframes enter {
@@ -178,9 +226,10 @@
       border-radius: 5px;
       background: rgba(31, 138, 112, 0.12);
       color: var(--cor-primaria);
-      font-size: 0.82rem;
+      font-size: 0.72rem;
       font-weight: 800;
       text-transform: uppercase;
+      letter-spacing: 0.06em;
     }
 
     h1,
@@ -192,13 +241,14 @@
     }
 
     h1 {
-      font-size: clamp(2.15rem, 7vw, 4.5rem);
+      font-size: clamp(2rem, 7vw, 3.2rem);
       max-width: 690px;
     }
 
     h2 {
-      font-size: clamp(1.7rem, 5vw, 3rem);
-      max-width: 650px;
+      font-size: clamp(1.75rem, 7vw, 2.2rem);
+      max-width: 460px;
+      font-weight: 900;
     }
 
     .subtitle,
@@ -207,7 +257,7 @@
       margin: 0;
       color: var(--cor-suave);
       line-height: 1.6;
-      font-size: clamp(1rem, 2.3vw, 1.12rem);
+      font-size: 0.95rem;
     }
 
     .hero-grid {
@@ -286,16 +336,16 @@
       gap: 10px;
       border-radius: var(--raio);
       padding: 15px 22px;
-      color: #0e2c2a;
-      background: var(--cor-destaque);
+      color: #ffffff;
+      background: var(--cor-secundaria);
       font-weight: 900;
-      box-shadow: 0 14px 26px rgba(247, 201, 72, 0.28);
+      box-shadow: 0 14px 26px rgba(15, 118, 110, 0.18);
       transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
     }
 
     .btn:hover {
       transform: translateY(-2px) scale(1.01);
-      box-shadow: 0 18px 34px rgba(247, 201, 72, 0.38);
+      box-shadow: 0 18px 34px rgba(15, 118, 110, 0.22);
       filter: saturate(1.05);
     }
 
@@ -313,7 +363,7 @@
 
     .btn.secondary {
       color: var(--cor-primaria);
-      background: #ecf7f2;
+      background: #ffffff;
       box-shadow: none;
       border: 1px solid var(--cor-borda);
     }
@@ -344,29 +394,32 @@
     .option-card,
     .choice-btn {
       width: 100%;
-      min-height: 112px;
-      border: 2px solid var(--cor-borda);
+      min-height: 74px;
+      border: 1px solid var(--cor-borda);
       border-radius: var(--raio);
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.92);
       color: var(--cor-primaria);
-      padding: 18px;
+      padding: 12px;
       display: grid;
-      gap: 8px;
+      gap: 9px;
       align-content: center;
       text-align: left;
       transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
     }
 
     .interest-card {
-      min-height: 202px;
+      min-height: 222px;
       align-content: start;
       padding: 0;
       overflow: hidden;
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
     }
 
     .interest-photo {
       width: 100%;
-      aspect-ratio: 16 / 9;
+      height: 130px;
+      aspect-ratio: auto;
       object-fit: cover;
       display: block;
       background: #eaf7f0;
@@ -374,35 +427,65 @@
 
     .interest-body {
       display: grid;
-      gap: 7px;
-      padding: 14px 16px 16px;
+      grid-template-columns: 1fr 32px;
+      gap: 10px;
+      align-items: center;
+      min-height: 92px;
+      padding: 13px;
+    }
+
+    .interest-body::after {
+      content: "›";
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      align-self: center;
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--cor-secundaria);
+      color: #ffffff;
+      font-size: 1.3rem;
+      line-height: 1;
+    }
+
+    .interest-body .option-title,
+    .interest-body .option-sub {
+      grid-column: 1;
     }
 
     .choice-btn {
-      min-height: 92px;
-      text-align: center;
-      place-items: center;
+      min-height: 74px;
+      grid-template-columns: 54px 1fr;
+      text-align: left;
+      place-items: center start;
       font-weight: 900;
-      font-size: 1.2rem;
+      font-size: 1.04rem;
     }
 
     .option-card:hover,
     .choice-btn:hover {
-      transform: translateY(-3px);
+      transform: translateY(-1px);
       border-color: var(--cor-secundaria);
-      box-shadow: 0 18px 38px rgba(18, 60, 58, 0.12);
+      box-shadow: var(--sombra-card);
     }
 
     .option-card.selected,
     .choice-btn.selected {
-      border-color: var(--cor-destaque);
-      background: linear-gradient(135deg, rgba(247, 201, 72, 0.24), rgba(31, 138, 112, 0.12));
-      box-shadow: 0 18px 40px rgba(247, 201, 72, 0.18);
+      border-color: var(--cor-secundaria);
+      background: var(--cor-soft);
+      box-shadow: var(--sombra-card);
     }
 
     .option-icon {
-      display: inline-block;
-      font-size: 2.1rem;
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--raio);
+      background: var(--cor-soft);
+      font-size: 1.8rem;
       line-height: 1;
     }
 
@@ -412,13 +495,18 @@
     }
 
     .choice-icon {
-      display: inline-block;
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--raio);
+      background: var(--cor-soft);
     }
 
     .choice-icon.x-icon {
-      width: 22px;
-      height: 22px;
-      border-radius: 14px;
+      width: 54px;
+      height: 54px;
+      border-radius: var(--raio);
       display: grid;
       place-items: center;
       background: #fee4e2;
@@ -434,7 +522,8 @@
     }
 
     .option-title {
-      font-size: 1.08rem;
+      display: block;
+      font-size: 1.02rem;
       font-weight: 900;
       line-height: 1.2;
     }
@@ -447,11 +536,12 @@
 
     .range-box {
       border: 1px solid var(--cor-borda);
-      background: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.88);
       border-radius: var(--raio);
-      padding: 18px;
+      padding: 14px;
       display: grid;
       gap: 14px;
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.06);
     }
 
     .range-value {
@@ -546,7 +636,7 @@
       fill: var(--cor-primaria);
       font-size: 42px;
       font-weight: 900;
-      font-family: "Poppins", system-ui, sans-serif;
+      font-family: "Inter", system-ui, sans-serif;
     }
 
     .queue-box {
@@ -774,10 +864,10 @@
 
     .social-proof {
       position: fixed;
-      left: 18px;
-      top: 18px;
+      right: max(16px, calc((100vw - 500px) / 2 + 16px));
+      bottom: max(26px, env(safe-area-inset-bottom));
       z-index: 20;
-      width: min(calc(100vw - 36px), 350px);
+      width: min(270px, calc(100vw - 32px));
       display: grid;
       grid-template-columns: auto 1fr;
       gap: 10px;
@@ -790,13 +880,13 @@
       color: var(--cor-primaria);
       opacity: 0;
       pointer-events: none;
-      transform: translateY(-18px) scale(0.98);
+      transform: translateY(10px);
       transition: opacity 0.22s ease, transform 0.22s ease;
     }
 
     .social-proof.show {
       opacity: 1;
-      transform: translateY(0) scale(1);
+      transform: translateY(0);
     }
 
     .social-proof-icon {
@@ -804,7 +894,7 @@
       height: 38px;
       display: grid;
       place-items: center;
-      border-radius: 14px;
+      border-radius: var(--raio);
       background: rgba(31, 138, 112, 0.12);
       position: relative;
       overflow: hidden;
@@ -855,8 +945,6 @@
     @media (max-width: 620px) {
       body {
         min-height: 100svh;
-        padding: 10px;
-        place-items: start center;
       }
 
       .app {
@@ -864,8 +952,8 @@
         align-content: start;
       }
 
-      .progress-wrap {
-        top: 6px;
+      .app-top {
+        padding: 12px 10px 10px;
       }
 
       .quiz-card,
@@ -879,7 +967,7 @@
 
       .screen {
         min-height: calc(100svh - 74px);
-        padding: 22px 16px;
+        padding: 18px 14px 24px;
       }
 
       .screen.active {
@@ -902,12 +990,37 @@
         grid-template-columns: 1fr;
       }
 
+      .screen[data-screen="1"] .option-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
+      }
+
       .interest-card {
-        min-height: auto;
+        min-height: 214px;
+      }
+
+      .interest-photo {
+        height: 96px;
       }
 
       .interest-body {
-        padding: 13px 14px 15px;
+        grid-template-columns: 1fr 28px;
+        min-height: 112px;
+        padding: 11px;
+      }
+
+      .interest-body::after {
+        width: 28px;
+        height: 28px;
+      }
+
+      .interest-body .option-title {
+        font-size: 0.94rem;
+      }
+
+      .interest-body .option-sub {
+        font-size: 0.78rem;
+        line-height: 1.32;
       }
 
       .benefit-strip {
@@ -976,8 +1089,8 @@
       }
 
       .social-proof {
-        left: 10px;
-        top: 10px;
+        right: 10px;
+        bottom: 14px;
         width: calc(100vw - 20px);
       }
     }
@@ -1010,16 +1123,22 @@
 </head>
 <body>
   <main class="app">
-    <section class="progress-wrap" aria-label="Progresso do quiz">
-      <div class="progress-meta">
-        <span id="progressText">Pergunta 1 de 6</span>
-        <button class="restart-btn" type="button" data-restart>Recomeçar</button>
-        <span id="progressPercent">0%</span>
+    <header class="app-top">
+      <div class="live-proof" aria-live="polite">
+        <span class="live-dot" aria-hidden="true"></span>
+        <span><strong id="activeSimulations">10</strong> pessoas fazendo simulação em <strong>Parauapebas</strong></span>
       </div>
-      <div class="progress-track">
-        <div class="progress-bar" id="progressBar"></div>
-      </div>
-    </section>
+      <section class="progress-wrap" aria-label="Progresso do quiz">
+        <div class="progress-meta">
+          <span id="progressText">Pergunta 1 de 6</span>
+          <button class="restart-btn" type="button" data-restart>Recomeçar</button>
+          <span id="progressPercent">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+      </section>
+    </header>
 
     <section class="quiz-card" aria-live="polite">
       <div class="screen active" data-screen="1">
@@ -1260,6 +1379,7 @@
     const progressText = document.getElementById("progressText");
     const progressPercent = document.getElementById("progressPercent");
     const progressBar = document.getElementById("progressBar");
+    const activeSimulations = document.getElementById("activeSimulations");
     const nomeInput = document.getElementById("nome");
     const telefoneInput = document.getElementById("telefone");
     const valorEntradaInput = document.getElementById("valorEntrada");
@@ -1272,6 +1392,8 @@
     let socialProofIndex = 0;
     let socialProofIntervalIndex = 0;
     let socialProofTimer;
+    let liveCounterTimer;
+    let activeSimulationCount = 10;
     let analysisTimer;
     let audioReady = false;
 
@@ -1705,6 +1827,27 @@
       socialProofTimer = window.setTimeout(showSocialProof, SOCIAL_PROOF_INTERVALS[0]);
     }
 
+    function startLiveCounter() {
+      if (!activeSimulations) return;
+      updateLiveCounter();
+      queueLiveCounterUpdate();
+    }
+
+    function queueLiveCounterUpdate() {
+      window.clearTimeout(liveCounterTimer);
+      const delay = 4200 + Math.floor(Math.random() * 3600);
+      liveCounterTimer = window.setTimeout(() => {
+        const direction = Math.random() > 0.46 ? 1 : -1;
+        activeSimulationCount = Math.max(8, Math.min(14, activeSimulationCount + direction));
+        updateLiveCounter();
+        queueLiveCounterUpdate();
+      }, delay);
+    }
+
+    function updateLiveCounter() {
+      activeSimulations.textContent = String(activeSimulationCount);
+    }
+
     function enableAudioNotice() {
       audioReady = true;
     }
@@ -1825,6 +1968,7 @@
 
     loadState();
     showScreen(state.screen || 1);
+    startLiveCounter();
     startSocialProof();
   </script>
 </body>
