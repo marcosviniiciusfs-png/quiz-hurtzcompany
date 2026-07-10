@@ -140,26 +140,6 @@
       text-transform: uppercase;
     }
 
-    .restart-btn {
-      min-height: 28px;
-      padding: 4px 10px;
-      border-radius: var(--raio);
-      background: rgba(255, 255, 255, 0.86);
-      color: var(--cor-primaria);
-      font-size: 0.72rem;
-      font-weight: 800;
-      transition: background 0.16s ease, transform 0.16s ease;
-    }
-
-    .restart-btn:hover {
-      background: rgba(31, 138, 112, 0.18);
-      transform: translateY(-1px);
-    }
-
-    .app.is-disqualified .restart-btn {
-      display: none;
-    }
-
     .progress-track {
       height: 5px;
       background: #dde7f0;
@@ -1362,11 +1342,6 @@
         gap: 6px;
       }
 
-      .restart-btn {
-        padding: 4px 8px;
-        font-size: 0.66rem;
-      }
-
       .screen {
         padding: 20px 14px;
       }
@@ -1395,7 +1370,6 @@
       <section class="progress-wrap" aria-label="Progresso do quiz">
         <div class="progress-meta">
           <span id="progressText">Pergunta 1 de 7</span>
-          <button class="restart-btn" type="button" data-restart>Recomeçar</button>
           <span id="progressPercent">0%</span>
         </div>
         <div class="progress-track">
@@ -2316,9 +2290,6 @@
       }
     }
 
-    document.querySelectorAll("[data-restart]").forEach((button) => {
-      button.addEventListener("click", resetQuiz);
-    });
     document.querySelector("[data-close-page]").addEventListener("click", closePage);
     document.addEventListener("pointerdown", enableAudioNotice, { once: true });
     document.addEventListener("keydown", enableAudioNotice, { once: true });
